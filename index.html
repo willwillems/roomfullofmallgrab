@@ -2,9 +2,9 @@
    <head>
       <style>
 :root {
-  --perspective: 200px;
-  --distance-to-screen: 30px;
-  --camera-lift: 160px;
+  --perspective: 195px;
+  --distance-to-screen: 40px;
+  --camera-lift: 5vw;
   --border-color: #DDD;
 }
 
@@ -12,6 +12,7 @@ html, body, main {
   height: 100%;
   width: 100%;
   background-color: #0F0707;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 #scroller {
@@ -151,26 +152,37 @@ main {
   transition: .3s linear all;
   
   border: 1px solid var(--border-color);
-  box-shadow: 0 0 8px 0px #f1e9e321;
 }
 
 .photo__progress {
-   background-color: #FFFFFF22;
+   background-color: #48484859;
    position: absolute;
    bottom: 0;
    left: 0;
    width: 100%;
    height: 0;
+
+   transition: .25s linear height;
 }
 
 .photo__title {
    position: absolute;
-   bottom: 0;
+   height: 32px;
+   width: 300%;
+   margin-left: -100%;
+   bottom: 4px;
    left: 0;
 
    text-align: center;
-   font-size: 28px;
+   font-size: 32px;
+   line-height: 1em;
+   font-weight: 900;
+   color: white;
+   text-transform: uppercase;
 }
+
+.left  .photo__title { transform: scaleX(-0.35); }
+.right .photo__title { transform: scaleX( 0.35); }
 
 .photo:hover {
   transform:
@@ -200,7 +212,7 @@ main {
 .right .photo:nth-child(2) {
   position: absolute;
   top: 20%;
-  left: 22%;
+  left: 18%;
   height: 60%;
   width: 150px;
 }
@@ -251,40 +263,33 @@ main {
       </div>
     </div>
     <div class="wall screen">
-       <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/77UAaOv-Was?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-      <!-- <iframe src="https://www.youtube-nocookie.com/embed/yiYAeRBN0Gc?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
+       <div id="player"></div>
     </div>
     <div class="wall right">
       <div class="container">
         <div id="photo-peacock" class="photo">
-           <!-- <img src="https://imgur.com/We5MZds.gif"/> -->
            <img src="img/peacock.gif"/>
            <div class="photo__progress"></div>
            <h1 class="photo__title">Peacock</h1>
-            <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/4mtfCl5J78c?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
         </div>
         <div id="photo-glitch" class="photo">
-           <!-- <img src="https://imgur.com/gkb6Aqc.gif"/> -->
            <img src="img/glitch.gif"/>
            <div class="photo__progress"></div>
            <h1 class="photo__title">Glitch</h1>
-          <!-- iframe( src="https://www.youtube.com/embed/2zM7rmzhWwE?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
         </div>
       </div>
     </div>
     <div class="wall left">
       <div class="container">
         <div id="photo-southbank" class="photo">
-           <!-- <img src="https://imgur.com/4bhh0Mx.gif"/> -->
            <img src="img/southbank.gif"/>
            <div class="photo__progress"></div>
-          <!-- iframe(src="https://www.youtube.com/embed/irTqcOFRK_o?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
+           <h1 class="photo__title">Southbank</h1>
         </div>
         <div id="photo-sonar" class="photo">
-           <!-- <img src="https://imgur.com/wLRWoGM.gif"/> -->
            <img src="img/sonar.gif"/>
            <div class="photo__progress"></div>
-          <!-- iframe(src="https://www.youtube.com/embed/77UAaOv-Was?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
+           <h1 class="photo__title">Sonar</h1>
         </div>
       </div>
     </div>
@@ -298,14 +303,31 @@ main {
 <audio id="audio-southbank">
 	<source src="audio/southbank.wav"></source>
 </audio>
+<audio id="audio-peacock">
+	<source src="audio/peacock.wav"></source>
+</audio>
+<audio id="audio-sonar">
+	<source src="audio/sonar.wav"></source>
+</audio>
 </body>
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
+
 const maxNegativeDistance = -200
 const maxNegativePerspective = 1
 
+const videos = {
+   peacock: "yiYAeRBN0Gc",
+   glitch: "4mtfCl5J78c",
+   southbank: "2zM7rmzhWwE",
+   sonar: "irTqcOFRK_o"
+}
+
 // audio els
-const audioGlitch    = document.getElementById("audio-glitch");
-const audioSouthbank = document.getElementById("audio-southbank");
+const audioGlitch    = document.getElementById("audio-glitch")
+const audioSouthbank = document.getElementById("audio-southbank")
+const audioPeacock   = document.getElementById("audio-peacock")
+const audioSonar     = document.getElementById("audio-sonar")
 
 // photo els
 const glitchPhoto    = document.getElementById("photo-glitch")
@@ -313,25 +335,20 @@ const southbankPhoto = document.getElementById("photo-southbank")
 const sonarPhoto     = document.getElementById("photo-sonar")
 const peacockPhoto   = document.getElementById("photo-peacock")
 
-// setter
-document.documentElement.style.setProperty('--distance-to-screen', "200px")
-// getter
-console.log(document.documentElement.style.getPropertyValue('--distance-to-screen'))
-
 let scroll = 40
 
 function setPerspective(ev) {
   scroll += ev.deltaY
   
- const distance = Math.max(200 + scroll, maxNegativeDistance)
+ const distance = Math.max(scroll, maxNegativeDistance)
  const distancePropVal = `${distance}px`
  
  const perpective = Math.max(190 + (scroll / 8), maxNegativePerspective)
  const perspectivePropVal = `${perpective}px`
  
  // these value make no sense yet
- const lift = Math.min(120, 140 - scroll) / 20
- const liftPropVal = `${lift}vw`
+ const lift = Math.min(120, 140 - scroll) / 15
+ const liftPropVal = `${4}vw`
  
  window.requestAnimationFrame(() => {
    document.documentElement.style.setProperty('--perspective', perspectivePropVal)
@@ -343,15 +360,87 @@ function setPerspective(ev) {
 document.getElementById("room").addEventListener("wheel", setPerspective)
 
 glitchPhoto.addEventListener("mouseenter", () => audioGlitch.play())
+glitchPhoto.addEventListener("click",      () => audioGlitch.play()) // quickfix
 glitchPhoto.addEventListener("mouseleave", () => (audioGlitch.pause(), audioGlitch.currentTime = 0))
 audioGlitch.addEventListener('ended', (event) => {
-  console.log('SET TO SCREEN');
+  player.loadVideoById({ 'videoId': videos.glitch, 'startSeconds': (11*60 + 17) })
+})
+audioGlitch.addEventListener('timeupdate', () => {
+   const ratio = audioGlitch.currentTime / audioGlitch.duration
+   const percentage = (ratio * 100)
+   ;[...glitchPhoto.children].find(el => el.className === "photo__progress").style = `height: ${percentage}%`
 })
 
 southbankPhoto.addEventListener("mouseenter", () => audioSouthbank.play())
+southbankPhoto.addEventListener("click",      () => audioSouthbank.play()) // quickfix
 southbankPhoto.addEventListener("mouseleave", () => (audioSouthbank.pause(), audioSouthbank.currentTime = 0))
 audioSouthbank.addEventListener('ended', (event) => {
-  console.log('SET TO SCREEN');
+  player.loadVideoById({ 'videoId': videos.southbank, 'startSeconds': (4*60 + 0) })
 })
+audioSouthbank.addEventListener('timeupdate', () => {
+   const ratio = audioSouthbank.currentTime / audioSouthbank.duration
+   const percentage = (ratio * 100)
+   ;[...southbankPhoto.children].find(el => el.className === "photo__progress").style = `height: ${percentage}%`
+})
+
+peacockPhoto.addEventListener("mouseenter", () => audioPeacock.play())
+peacockPhoto.addEventListener("click",      () => audioPeacock.play()) // quickfix
+peacockPhoto.addEventListener("mouseleave", () => (audioPeacock.pause(), audioPeacock.currentTime = 0))
+audioPeacock.addEventListener('ended', (event) => {
+  player.loadVideoById({ 'videoId': videos.peacock, 'startSeconds': (2*60 + 36) })
+})
+audioPeacock.addEventListener('timeupdate', () => {
+   const ratio = audioPeacock.currentTime / audioPeacock.duration
+   const percentage = (ratio * 100)
+   ;[...peacockPhoto.children].find(el => el.className === "photo__progress").style = `height: ${percentage}%`
+})
+
+sonarPhoto.addEventListener("mouseenter", () => audioSonar.play())
+sonarPhoto.addEventListener("click",      () => audioSonar.play()) // quickfix
+sonarPhoto.addEventListener("mouseleave", () => (audioSonar.pause(), audioSonar.currentTime = 0))
+audioSonar.addEventListener('ended', (event) => {
+  player.loadVideoById({ 'videoId': videos.sonar, 'startSeconds': (15*60 + 21) })
+})
+audioSonar.addEventListener('timeupdate', () => {
+   const ratio = audioSonar.currentTime / audioSonar.duration
+   const percentage = (ratio * 100)
+   ;[...sonarPhoto.children].find(el => el.className === "photo__progress").style = `height: ${percentage}%`
+})
+
+
+// YT 
+
+var player;
+function onYouTubeIframeAPIReady() {
+   player = new YT.Player('player', {
+      videoId: '77UAaOv-Was',
+      events: {
+      'onReady': onPlayerReady,
+      'onStateChange': onPlayerStateChange
+      },
+      playerVars: {
+         modestbranding: 1
+      }
+   });
+}
+
+// 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
 </script>
 </html>
