@@ -61,6 +61,7 @@ main {
   height: var(--screen-height);
   
   transform-style: preserve-3d;
+  pointer-events: none; // set all on children
 }
 
 .wall {
@@ -69,11 +70,12 @@ main {
   height: 100%;
   opacity: 1;
   border: 2px solid var(--border-color);
+  pointer-events: all;
 }
 
 
 .screen {
-  opacity: 1;
+  pointer-events: all;
   background-color: black;
   transform:
     translateZ(calc(-1 * var(--screen-height-half)))
