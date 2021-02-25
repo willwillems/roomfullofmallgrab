@@ -5,6 +5,7 @@
   --perspective: 200px;
   --distance-to-screen: 30px;
   --camera-lift: 160px;
+  --border-color: #DDD;
 }
 
 html, body, main {
@@ -61,13 +62,13 @@ main {
   width: 100%;
   height: 100%;
   opacity: 1;
-  border: 2px solid white;
+  border: 2px solid var(--border-color);
 }
 
 
 .screen {
   opacity: 1;
-  background-color: #6e44ff;
+  background-color: black;
   transform:
     translateZ(calc(-1 * var(--screen-height-half)))
     translateZ(var(--distance-to-screen))
@@ -82,7 +83,7 @@ main {
   width: 100%;
 }
 
-.right {
+.left {
   background-image: radial-gradient(29% 100% at 0% 20%, #531D7F, transparent);
 /*   background-image: radial-gradient(100% 100% at 150% 50%, #CC1188 0%, #000000 100%); */
 
@@ -96,7 +97,7 @@ main {
     ;
 }
 
-.left {
+.right {
   background-image: radial-gradient(63% 100% at 0% 20%, #500d16, transparent);
 /*   background-image: radial-gradient(100% 100% at -50% 50%, #EE5544 0%, #000000 100%); */
   
@@ -149,7 +150,7 @@ main {
   
   transition: .3s linear all;
   
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   box-shadow: 0 0 8px 0px #f1e9e321;
 }
 
@@ -160,6 +161,15 @@ main {
    left: 0;
    width: 100%;
    height: 0;
+}
+
+.photo__title {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+
+   text-align: center;
+   font-size: 28px;
 }
 
 .photo:hover {
@@ -174,7 +184,7 @@ main {
 /*   transform: scaleY(4.5); */
 }
 
-.left .photo1 {
+.right .photo:nth-child(1) {
   position: absolute;
   top: 20%;
   left: 8%;
@@ -182,12 +192,12 @@ main {
   width: 100px;
 }
 
-.left .photo1 img {
+.right .photo:nth-child(1) img {
   width: 400%;
   margin-left: -150%;
 }
 
-.left .photo2 {
+.right .photo:nth-child(2) {
   position: absolute;
   top: 20%;
   left: 22%;
@@ -195,7 +205,7 @@ main {
   width: 150px;
 }
 
-.right .photo1 {
+.left .photo:nth-child(1) {
   position: absolute;
   top: 20%;
   left: 8%;
@@ -203,7 +213,7 @@ main {
   width: 200px;
 }
 
-.right .photo2 {
+.left .photo:nth-child(2) {
   position: absolute;
   top: 20%;
   left: 25%;
@@ -212,7 +222,7 @@ main {
 }
 
 .ceiling .padding {
-  border: 1px solid white;
+  border: 1px solid var(--border-color);
   background-color: #190a0a;
   
   width: 60%;
@@ -244,31 +254,33 @@ main {
        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/77UAaOv-Was?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       <!-- <iframe src="https://www.youtube-nocookie.com/embed/yiYAeRBN0Gc?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
     </div>
-    <div class="wall left">
+    <div class="wall right">
       <div class="container">
-        <div id="photo-peacock" class="photo photo1">
+        <div id="photo-peacock" class="photo">
            <!-- <img src="https://imgur.com/We5MZds.gif"/> -->
            <img src="img/peacock.gif"/>
            <div class="photo__progress"></div>
+           <h1 class="photo__title">Peacock</h1>
             <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/4mtfCl5J78c?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
         </div>
-        <div id="photo-glitch" class="photo photo2">
+        <div id="photo-glitch" class="photo">
            <!-- <img src="https://imgur.com/gkb6Aqc.gif"/> -->
            <img src="img/glitch.gif"/>
            <div class="photo__progress"></div>
+           <h1 class="photo__title">Glitch</h1>
           <!-- iframe( src="https://www.youtube.com/embed/2zM7rmzhWwE?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
         </div>
       </div>
     </div>
-    <div class="wall right">
+    <div class="wall left">
       <div class="container">
-        <div id="photo-southbank" class="photo photo1">
+        <div id="photo-southbank" class="photo">
            <!-- <img src="https://imgur.com/4bhh0Mx.gif"/> -->
            <img src="img/southbank.gif"/>
            <div class="photo__progress"></div>
           <!-- iframe(src="https://www.youtube.com/embed/irTqcOFRK_o?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
         </div>
-        <div id="photo-sonar" class="photo photo2">
+        <div id="photo-sonar" class="photo">
            <!-- <img src="https://imgur.com/wLRWoGM.gif"/> -->
            <img src="img/sonar.gif"/>
            <div class="photo__progress"></div>
