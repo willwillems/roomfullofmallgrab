@@ -1,0 +1,345 @@
+<html>
+   <head>
+      <style>
+:root {
+  --perspective: 200px;
+  --distance-to-screen: 30px;
+  --camera-lift: 160px;
+}
+
+html, body, main {
+  height: 100%;
+  width: 100%;
+  background-color: #0F0707;
+}
+
+#scroller {
+  height: 100%;
+  width: 100%;
+  
+  overflow-y: scroll;
+}
+
+#scroll {
+  height: 200%;
+  width: 100%;
+}
+
+main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  
+  
+  perspective: var(--perspective);
+  perspective-origin: 50% 60%;
+  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  overflow: hidden;
+}
+
+.room {
+  --screen-width: 100vw;
+  --screen-ratio: 0.53;
+  --screen-height: calc(var(--screen-width) * var(--screen-ratio));
+  --screen-width-half: calc(var(--screen-width) / 2);
+  --screen-height-half: calc(var(--screen-height) / 2);
+   
+  position: relative;
+  width: var(--screen-width);
+  height: var(--screen-height);
+  
+  transform-style: preserve-3d;
+}
+
+.wall {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  border: 2px solid white;
+}
+
+
+.screen {
+  opacity: 1;
+  background-color: #6e44ff;
+  transform:
+    translateZ(calc(-1 * var(--screen-height-half)))
+    translateZ(var(--distance-to-screen))
+    translateY(calc(-1 * var(--camera-lift)))
+    ;
+  
+/*   pointer-events: initial; */
+}
+
+.screen > * {
+  height: 100%;
+  width: 100%;
+}
+
+.right {
+  background-image: radial-gradient(29% 100% at 0% 20%, #531D7F, transparent);
+/*   background-image: radial-gradient(100% 100% at 150% 50%, #CC1188 0%, #000000 100%); */
+
+   transform-origin: center right;
+   transform:
+    translateX(calc(-1 * var(--screen-width)))
+    rotateY(-90deg)
+    translateX(calc(var(--screen-width) * 0.735))
+    translateX(calc( 1 * var(--distance-to-screen)))
+    translateY(calc(-1 * var(--camera-lift)))
+    ;
+}
+
+.left {
+  background-image: radial-gradient(63% 100% at 0% 20%, #500d16, transparent);
+/*   background-image: radial-gradient(100% 100% at -50% 50%, #EE5544 0%, #000000 100%); */
+  
+  /* This transform is the shitier one, hoveravility seems to depend on the "side" of the div you're on */
+  transform:
+    /* rotate from paralel to 90deg*/
+    rotateY(-90deg)
+    /* pull wall back to edge of room*/
+    translateZ(calc(-1 * var(--screen-width-half)))
+    /* pulls wall edge to shared edge screen*/
+    translateX(calc( 1 * (var(--screen-width-half) - var(--screen-height-half))))
+    /* apply distance variable for scroll */
+    translateX(calc( 1 * var(--distance-to-screen)))
+    /* apply comon camera lift effect */
+    translateY(calc(-1 * var(--camera-lift)))
+    ;
+}
+
+.ceiling {
+  background-image: radial-gradient(50% 53% at 10% 0%, #531D7F, transparent), radial-gradient(50% 53% at 90% 0%, #500d16, transparent), radial-gradient(100% 23% at 50% 15%, #500d16, transparent);
+/*   background-image: radial-gradient(100% 120% at 50% -40%, #EE3333 0%, #000000 100%); */
+  transform:
+    rotateX(90deg)
+    translateZ(var(--screen-height-half))
+    translateY(var(--distance-to-screen))
+    translateZ(var(--camera-lift))
+    ;
+}
+
+.bottom {
+  background-image: radial-gradient(100% 63% at 50% 100%, #25090d, transparent);
+/*   background-color: #1e0003; */
+  transform:
+    rotateX(-90deg)
+    translateZ(var(--screen-height-half))
+    translateY(calc(-1* var(--distance-to-screen)))
+    translateZ(calc(-1 * var(--camera-lift)))
+    ;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.photo {
+  position: relative;
+  overflow: hidden;
+  
+  transition: .3s linear all;
+  
+  border: 1px solid white;
+  box-shadow: 0 0 8px 0px #f1e9e321;
+}
+
+.photo__progress {
+   background-color: #FFFFFF22;
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 0;
+}
+
+.photo:hover {
+  transform:
+    scale(1.02)
+    ;
+}
+
+.photo > img, .photo > iframe, .photo > video, .photo > picture {
+  width: 100%;
+  height: 100%;
+/*   transform: scaleY(4.5); */
+}
+
+.left .photo1 {
+  position: absolute;
+  top: 20%;
+  left: 8%;
+  height: 60%;
+  width: 100px;
+}
+
+.left .photo1 img {
+  width: 400%;
+  margin-left: -150%;
+}
+
+.left .photo2 {
+  position: absolute;
+  top: 20%;
+  left: 22%;
+  height: 60%;
+  width: 150px;
+}
+
+.right .photo1 {
+  position: absolute;
+  top: 20%;
+  left: 8%;
+  height: 60%;
+  width: 200px;
+}
+
+.right .photo2 {
+  position: absolute;
+  top: 20%;
+  left: 25%;
+  height: 60%;
+  width: 100px;
+}
+
+.ceiling .padding {
+  border: 1px solid white;
+  background-color: #190a0a;
+  
+  width: 60%;
+  height: 70px;
+  
+  position: absolute;
+  top: 40px;
+  left: 20%;
+}
+
+.ceiling .padding:nth-child(1) {
+  top: 110px;
+}
+
+.ceiling .padding:nth-child(2) {
+  top: 270px;
+}
+      </style>
+   </head>
+<main>
+  <div class="room" id="room">
+    <div class="wall ceiling">
+      <div class="container">
+        <div class="padding"></div>
+        <div class="padding"></div>
+      </div>
+    </div>
+    <div class="wall screen">
+       <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/77UAaOv-Was?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <!-- <iframe src="https://www.youtube-nocookie.com/embed/yiYAeRBN0Gc?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
+    </div>
+    <div class="wall left">
+      <div class="container">
+        <div id="photo-peacock" class="photo photo1">
+           <!-- <img src="https://imgur.com/We5MZds.gif"/> -->
+           <img src="img/peacock.gif"/>
+           <div class="photo__progress"></div>
+            <!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/4mtfCl5J78c?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe> -->
+        </div>
+        <div id="photo-glitch" class="photo photo2">
+           <!-- <img src="https://imgur.com/gkb6Aqc.gif"/> -->
+           <img src="img/glitch.gif"/>
+           <div class="photo__progress"></div>
+          <!-- iframe( src="https://www.youtube.com/embed/2zM7rmzhWwE?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
+        </div>
+      </div>
+    </div>
+    <div class="wall right">
+      <div class="container">
+        <div id="photo-southbank" class="photo photo1">
+           <!-- <img src="https://imgur.com/4bhh0Mx.gif"/> -->
+           <img src="img/southbank.gif"/>
+           <div class="photo__progress"></div>
+          <!-- iframe(src="https://www.youtube.com/embed/irTqcOFRK_o?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
+        </div>
+        <div id="photo-sonar" class="photo photo2">
+           <!-- <img src="https://imgur.com/wLRWoGM.gif"/> -->
+           <img src="img/sonar.gif"/>
+           <div class="photo__progress"></div>
+          <!-- iframe(src="https://www.youtube.com/embed/77UAaOv-Was?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen)-->
+        </div>
+      </div>
+    </div>
+    <div class="wall bottom"></div>
+  </div>
+</main>
+<!-- audio tags -->
+<audio id="audio-glitch">
+	<source src="audio/glitch.wav"></source>
+</audio>
+<audio id="audio-southbank">
+	<source src="audio/southbank.wav"></source>
+</audio>
+</body>
+<script>
+const maxNegativeDistance = -200
+const maxNegativePerspective = 1
+
+// audio els
+const audioGlitch    = document.getElementById("audio-glitch");
+const audioSouthbank = document.getElementById("audio-southbank");
+
+// photo els
+const glitchPhoto    = document.getElementById("photo-glitch")
+const southbankPhoto = document.getElementById("photo-southbank")
+const sonarPhoto     = document.getElementById("photo-sonar")
+const peacockPhoto   = document.getElementById("photo-peacock")
+
+// setter
+document.documentElement.style.setProperty('--distance-to-screen', "200px")
+// getter
+console.log(document.documentElement.style.getPropertyValue('--distance-to-screen'))
+
+let scroll = 40
+
+function setPerspective(ev) {
+  scroll += ev.deltaY
+  
+ const distance = Math.max(200 + scroll, maxNegativeDistance)
+ const distancePropVal = `${distance}px`
+ 
+ const perpective = Math.max(190 + (scroll / 8), maxNegativePerspective)
+ const perspectivePropVal = `${perpective}px`
+ 
+ // these value make no sense yet
+ const lift = Math.min(120, 140 - scroll) / 20
+ const liftPropVal = `${lift}vw`
+ 
+ window.requestAnimationFrame(() => {
+   document.documentElement.style.setProperty('--perspective', perspectivePropVal)
+   document.documentElement.style.setProperty('--distance-to-screen', distancePropVal)
+   document.documentElement.style.setProperty('--camera-lift', liftPropVal)
+ })
+}
+
+document.getElementById("room").addEventListener("wheel", setPerspective)
+
+glitchPhoto.addEventListener("mouseenter", () => audioGlitch.play())
+glitchPhoto.addEventListener("mouseleave", () => (audioGlitch.pause(), audioGlitch.currentTime = 0))
+audioGlitch.addEventListener('ended', (event) => {
+  console.log('SET TO SCREEN');
+})
+
+southbankPhoto.addEventListener("mouseenter", () => audioSouthbank.play())
+southbankPhoto.addEventListener("mouseleave", () => (audioSouthbank.pause(), audioSouthbank.currentTime = 0))
+audioSouthbank.addEventListener('ended', (event) => {
+  console.log('SET TO SCREEN');
+})
+</script>
+</html>
